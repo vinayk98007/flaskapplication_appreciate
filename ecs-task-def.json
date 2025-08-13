@@ -8,7 +8,7 @@
   "requiresCompatibilities": ["FARGATE"],
   "containerDefinitions": [
     {
-      "name": "flask-app",
+      "name": "ecs-loki-demo",
       "image": "877407756445.dkr.ecr.ap-south-1.amazonaws.com/ecs-loki-demo-repo:latest",
       "portMappings": [
         { "containerPort": 5000, "protocol": "tcp" }
