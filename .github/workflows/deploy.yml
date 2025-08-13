@@ -1,4 +1,4 @@
-name: Deploy to ECS
+name: Deploy Flask App to ECS
 
 on:
   push:
@@ -21,11 +21,15 @@ jobs:
       - name: Login to Amazon ECR
         uses: aws-actions/amazon-ecr-login@v2
 
-      - name: Build, tag, and push image to ECR
+      - name: Build, tag, and push Docker image to ECR
         run: |
           IMAGE_TAG=latest
           ECR_URL=877407756445.dkr.ecr.ap-south-1.amazonaws.com/ecs-loki-demo-repo
-          docker build -t $ECR_URL:$IMAGE_TAG .
+          
+          echo "Building Docker image..."
+          docker build --platform linux/amd64 -t $ECR_URL:$IMAGE_TAG .
+          
+          echo "Pushing Docker image..."
           docker push $ECR_URL:$IMAGE_TAG
 
       - name: Force new ECS deployment
