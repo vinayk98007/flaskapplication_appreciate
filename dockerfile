@@ -7,7 +7,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-# ECS expects the container to listen on port 8000 by default (change if needed)
 EXPOSE 5000
 
-CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "5000"]
+# Use Gunicorn for production
+CMD ["gunicorn", "--bind", "0.0.0.0:5000", "app:app"]
