@@ -1,0 +1,26 @@
+# Flask Application with Promtail for ECS
+
+This repository contains a Flask application and Promtail setup for running on AWS ECS.  
+Promtail is used to ship application logs to Loki.
+
+## 📌 Project Structure
+
+├── .dockerignore # Files to ignore in Docker builds
+├── ecs-task-def.json # ECS Task Definition
+├── .github/workflows/deploy.yml # GitHub Actions workflow for deployment
+├── flask_app/
+│ ├── Dockerfile # Docker build for Flask app
+│ ├── app.py # Main Flask application
+│ └── requirements.txt # Python dependencies
+└── promtail/
+├── Dockerfile # Docker build for Promtail
+└── promtail-config.yml # Promtail configuration
+
+
+All required urls 
+------------
+
+Application url -: http://ecs-loki-demo-alb-241163941.ap-south-1.elb.amazonaws.com/health
+Grafana url -: http://13.127.231.150:3000/
+userrname-: admin 
+password -: admin@123
