@@ -30,9 +30,6 @@
       "name": "promtail",
       "image": "877407756445.dkr.ecr.ap-south-1.amazonaws.com/promtail-custom:latest",
       "essential": false,
-      "command": [
-        "-config.file=/etc/promtail/promtail-config.yml"
-      ],
       "mountPoints": [
         {
           "sourceVolume": "varlog",
