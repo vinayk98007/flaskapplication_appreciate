@@ -21,7 +21,7 @@ jobs:
       - name: Login to Amazon ECR
         uses: aws-actions/amazon-ecr-login@v2
 
-      # Build and push Flask app image
+      # Build & Push Flask App Image
       - name: Build & Push Flask App Image
         run: |
           IMAGE_TAG=latest
@@ -29,7 +29,7 @@ jobs:
           docker build --platform linux/amd64 -t $ECR_URL:$IMAGE_TAG ./flask_app
           docker push $ECR_URL:$IMAGE_TAG
 
-      # Build and push Promtail image
+      # Build & Push Promtail Image
       - name: Build & Push Promtail Image
         run: |
           IMAGE_TAG=latest
@@ -37,16 +37,21 @@ jobs:
           docker build --platform linux/amd64 -t $ECR_URL:$IMAGE_TAG ./promtail
           docker push $ECR_URL:$IMAGE_TAG
 
-      # Register new ECS task definition
+      # Register new ECS Task Definition and capture revision ARN
       - name: Register ECS Task Definition
+        id: register-task
         run: |
-          aws ecs register-task-definition \
-            --cli-input-json file://ecs-task-def.json
+          REVISION=$(aws ecs register-task-definition \
+            --cli-input-json file://ecs-task-def.json \
+            --query 'taskDefinition.taskDefinitionArn' \
+            --output text)
+          echo "revision=$REVISION" >> $GITHUB_OUTPUT
 
-      # Deploy updated service
+      # Update ECS Service with the exact revision ARN
       - name: Update ECS Service
         run: |
           aws ecs update-service \
             --cluster ecs-loki-demo-cluster \
             --service ecs-loki-demo-service \
-            --task-definition ecs-loki-demo-task
+            --task-definition ${{ steps.register-task.outputs.revision }} \
+            --force-new-deployment
