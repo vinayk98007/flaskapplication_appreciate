@@ -24,15 +24,7 @@
           "sourceVolume": "varlog",
           "containerPath": "/var/log"
         }
-      ],
-      "logConfiguration": {
-        "logDriver": "awslogs",
-        "options": {
-          "awslogs-group": "/ecs/ecs-loki-demo",
-          "awslogs-region": "ap-south-1",
-          "awslogs-stream-prefix": "ecs"
-        }
-      }
+      ]
     },
     {
       "name": "promtail",
@@ -43,15 +35,7 @@
           "sourceVolume": "varlog",
           "containerPath": "/var/log"
         }
-      ],
-      "logConfiguration": {
-        "logDriver": "awslogs",
-        "options": {
-          "awslogs-group": "/ecs/promtail",
-          "awslogs-region": "ap-south-1",
-          "awslogs-stream-prefix": "ecs"
-        }
-      }
+      ]
     }
   ]
 }
