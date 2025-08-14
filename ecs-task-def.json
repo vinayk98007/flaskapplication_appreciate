@@ -6,22 +6,19 @@
   "cpu": "512",
   "memory": "1024",
   "requiresCompatibilities": ["FARGATE"],
+  "volumes": [
+    {
+      "name": "varlog"
+    }
+  ],
   "containerDefinitions": [
     {
-      "name": "ecs-loki-demo",
+      "name": "flask-app",
       "image": "877407756445.dkr.ecr.ap-south-1.amazonaws.com/ecs-loki-demo-repo:latest",
       "portMappings": [
         { "containerPort": 5000, "protocol": "tcp" }
       ],
       "essential": true,
-      "logConfiguration": {
-        "logDriver": "awslogs",
-        "options": {
-          "awslogs-group": "/ecs/ecs-loki-demo",
-          "awslogs-region": "ap-south-1",
-          "awslogs-stream-prefix": "ecs"
-        }
-      },
       "mountPoints": [
         {
           "sourceVolume": "varlog",
@@ -33,23 +30,15 @@
       "name": "promtail",
       "image": "877407756445.dkr.ecr.ap-south-1.amazonaws.com/promtail-custom:latest",
       "essential": false,
+      "command": [
+        "-config.file=/etc/promtail/promtail-config.yml"
+      ],
       "mountPoints": [
         {
           "sourceVolume": "varlog",
           "containerPath": "/var/log"
         }
-      ],
-      "logConfiguration": {
-        "logDriver": "awslogs",
-        "options": {
-          "awslogs-group": "/ecs/promtail",
-          "awslogs-region": "ap-south-1",
-          "awslogs-stream-prefix": "ecs"
-        }
-      }
+      ]
     }
-  ],
-  "volumes": [
-    { "name": "varlog" }
   ]
 }
